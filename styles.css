@@ -1,0 +1,224 @@
+/* styles.css */
+/* 全局样式 */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* 新增左侧导航栏样式 */
+.left-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  background-color: #fff;
+  overflow-y: auto;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.left-navbar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.left-navbar-item {
+  display: block;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background-color: #f4f4f4;
+  border: none;
+  cursor: pointer;
+}
+
+.left-navbar-item:hover {
+  background-color: #eee;
+}
+
+/* 搜索按钮样式 */
+.search-icon {
+  font-size: 24px;
+}
+
+/* 搜索框样式 */
+#search-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 10;
+}
+
+#search-input {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 原有的导航栏样式 */
+.navbar {
+  background-color: #fff;
+  overflow: hidden;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.navbar-item {
+  color: #333;
+  text-decoration: none;
+  padding: 14px 16px;
+  display: block;
+}
+
+.navbar-item:hover {
+  background-color: #eee;
+  color: black;
+}
+
+/* 新增导航栏图片样式 */
+.navbar-logo {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+
+/* 公告按钮样式 */
+.announcement-button {
+  display: block;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background-color: #f4f4f4;
+  border: none;
+  cursor: pointer;
+  color: #333; /* 按钮文本颜色 */
+}
+
+.announcement-button:hover {
+  background-color: #eee;
+}
+
+/* 公告图标样式 */
+.announcement-icon {
+  font-size: 24px;
+  margin-right: 10px; /* 图标与文本之间的间距 */
+}
+
+/* 公告文本样式 */
+.announcement-text {
+  font-size: 16px;
+}
+/* 页面标题样式 */
+header {
+  text-align: center;
+  padding: 30px 0;
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* 网格容器样式 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 10px;
+  padding: 20px;
+  margin-left: 50px;
+}
+
+/* 网格项样式 */
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+/* 网格内容样式 */
+.grid-content {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.grid-content:hover {
+  transform: scale(1.05);
+}
+
+/* 图片样式 */
+.grid-content img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* 文本样式 */
+.grid-text {
+  padding: 10px;
+}
+
+.grid-text h2 {
+  margin: 0;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.grid-text p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .grid-item {
+    margin-bottom: 10px;
+  }
+
+  .left-navbar {
+    display: none;
+  }
+}
+
+/* 新增字体样式 */
+@import url('https://fonts.googleapis.com/css2?family=你好旧时光&display=swap');
+
+.navbar-item {
+  font-family: '你好旧时光', cursive;
+}
