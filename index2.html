@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单镜像站</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
+    <script>
+        function loadResource() {
+            var url = new URL(window.location.href);
+            var resourceUrl = url.searchParams.get('url');
+            if (resourceUrl) {
+                document.getElementById('resourceFrame').src = resourceUrl;
+            } else {
+                alert('请提供一个URL参数。');
+            }
+        }
+    </script>
+</head>
+<body onload="loadResource()">
+    <h1>简单镜像站</h1>
+    <iframe id="resourceFrame" title="资源展示"></iframe>
+</body>
+</html>
