@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Request Page</title>
+    <script>
+        function fetchSongDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlId = urlParams.get('urlid');
+
+            if (urlId) {
+                // 构建请求URL
+                const requestUrl = `https://music.cyrilstudio.top/song/url?id=${urlId}`;
+
+                // 创建一个fetch请求来获取数据
+                fetch(requestUrl)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        // 检查data对象是否包含正确的结构
+                        if (data.code === 200 && data.data && data.data.length > 0) {
+                            displaySongDetails(data.data[0]);
+                        } else {
+                            throw new Error('Invalid response data.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                        document.getElementById('songDetails').innerHTML = 'Failed to load song details.';
+                    });
+            } else {
+                document.getElementById('songDetails').innerHTML = 'Please provide a valid URL ID.';
+            }
+        }
+
+        function displaySongDetails(songData) {
+            // 假设songData是一个包含歌曲信息的对象
+            const songDetails = document.getElementById('songDetails');
+            songDetails.innerHTML = `
+                <h2>Song Details</h2>
+                <p>ID: ${songData.id}</p>
+                <p>URL: <a href="${songData.url}" target="_blank">${songData.url}</a></p>
+                <p>Bitrate: ${songData.br} kbps</p>
+                <p>Size: ${songData.size} bytes</p>
+                <p>MD5: ${songData.md5}</p>
+                <p>Level: ${songData.level}</p>
+                <p>Fee: ${songData.fee}</p>
+                <audio controls>
+                    <source src="${songData.url}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            `;
+        }
+
+        // 页面加载完成后执行fetchSongDetails函数
+        window.onload = fetchSongDetails;
+    </script>
+</head>
+<body>
+    <h1>Welcome to SCM Music Request</h1>
+    <p>Enter the URL ID in the navigation bar to request a song.</p>
+    <div id="songDetails">
+        <!-- 歌曲详细信息将在这里显示 -->
+    </div>
+</body>
+</html>
