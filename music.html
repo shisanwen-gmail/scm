@@ -5,27 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Request Page</title>
     <script>
-        // 检查 URL 中是否有 urlid 参数
-        function checkForUrlId() {
+        function fetchSongDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const urlId = urlParams.get('urlid');
 
             if (urlId) {
-                // 如果存在 urlid 参数，跳转到 music.html 并带上该参数
-                window.location.href = `music.html?urlid=${urlId}`;
+                // 构建请求URL
+                const requestUrl = `https://music.cyrilstudio.top/song/url?id=${urlId}`; 
+
+                // 创建一个fetch请求来获取数据
+                fetch(requestUrl)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        // 检查data对象是否包含正确的结构
+                        if (data.code === 200 && data.data && data.data.length > 0) {
+                            displaySongDetails(data.data[0]);
+                        } else {
+                            throw new Error('Invalid response data.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                        document.getElementById('songDetails').innerHTML = 'Failed to load song details.';
+                    });
             } else {
-                // 如果不存在 urlid 参数，显示提示信息
-                alert('Please provide a valid URL ID.');
+                // 如果没有urlid参数，显示输入框
+                document.getElementById('songDetails').innerHTML = `
+                    <p>Please enter a URL ID:</p>
+                    <input type="text" id="urlIdInput" placeholder="Enter URL ID">
+                    <button onclick="redirectToMusicPage()">Go</button>
+                `;
             }
         }
 
-        // 页面加载完成后执行 checkForUrlId 函数
-        window.onload = checkForUrlId;
+        function displaySongDetails(songData) {
+            // 假设songData是一个包含歌曲信息的对象
+            const songDetails = document.getElementById('songDetails');
+            songDetails.innerHTML = `
+                <h2>Song Details</h2>
+                <p>ID: ${songData.id}</p>
+                <p>URL: <a href="${songData.url}" target="_blank">${songData.url}</a></p>
+                <p>Bitrate: ${songData.br} kbps</p>
+                <p>Size: ${songData.size} bytes</p>
+                <p>MD5: ${songData.md5}</p>
+                <p>Level: ${songData.level}</p>
+                <p>Fee: ${songData.fee}</p>
+                <audio controls>
+                    <source src="${songData.url}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            `;
+        }
+
+        function redirectToMusicPage() {
+            const urlId = document.getElementById('urlIdInput').value;
+            if (urlId) {
+                window.location.href = `music.html?urlid=${encodeURIComponent(urlId)}`;
+            } else {
+                alert('Please enter a valid URL ID.');
+            }
+        }
+
+        // 页面加载完成后执行fetchSongDetails函数
+        window.onload = fetchSongDetails;
     </script>
 </head>
 <body>
     <h1>Welcome to SCM Music Request</h1>
     <p>Enter the URL ID in the navigation bar to request a song.</p>
-    <!-- 歌曲详细信息将在这里显示 -->
+    <div id="songDetails">
+        <!-- 歌曲详细信息将在这里显示 -->
+    </div>
 </body>
 </html>
