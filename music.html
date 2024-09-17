@@ -5,37 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Request Page</title>
     <script>
-        function fetchSongDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlId = urlParams.get('urlid');
+        function fetchSongDetails(urlId) {
+            // 构建请求URL
+            const requestUrl = `https://music.cyrilstudio.top/song/url?id=${urlId}`; 
 
-            if (urlId) {
-                // 构建请求URL
-                const requestUrl = `https://music.cyrilstudio.top/song/url?id=${urlId}`;
-
-                // 创建一个fetch请求来获取数据
-                fetch(requestUrl)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Network response was not ok.');
-                    })
-                    .then(data => {
-                        // 检查data对象是否包含正确的结构
-                        if (data.code === 200 && data.data && data.data.length > 0) {
-                            displaySongDetails(data.data[0]);
-                        } else {
-                            throw new Error('Invalid response data.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There has been a problem with your fetch operation:', error);
-                        document.getElementById('songDetails').innerHTML = 'Failed to load song details.';
-                    });
-            } else {
-                document.getElementById('songDetails').innerHTML = 'Please provide a valid URL ID.';
-            }
+            // 创建一个fetch请求来获取数据
+            fetch(requestUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    // 检查data对象是否包含正确的结构
+                    if (data.code === 200 && data.data && data.data.length > 0) {
+                        displaySongDetails(data.data[0]);
+                    } else {
+                        throw new Error('Invalid response data.');
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    document.getElementById('songDetails').innerHTML = 'Failed to load song details.';
+                });
         }
 
         function displaySongDetails(songData) {
@@ -57,13 +50,18 @@
             `;
         }
 
-        // 页面加载完成后执行fetchSongDetails函数
-        window.onload = fetchSongDetails;
+        function loadSongDetails() {
+            const urlId = document.getElementById('urlIdInput').value;
+            fetchSongDetails(urlId);
+        }
+
     </script>
 </head>
 <body>
     <h1>Welcome to SCM Music Request</h1>
-    <p>Enter the URL ID in the navigation bar to request a song.</p>
+    <p>Enter the URL ID below to request a song:</p>
+    <input type="text" id="urlIdInput" placeholder="Enter URL ID">
+    <button onclick="loadSongDetails()">Load Song Details</button>
     <div id="songDetails">
         <!-- 歌曲详细信息将在这里显示 -->
     </div>
