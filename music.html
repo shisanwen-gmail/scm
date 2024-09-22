@@ -16,182 +16,66 @@
             background-color: #333;
             color: #fff;
         }
-        audio, button {
-            background-color: #f0f0f0;
-            color: #333;
+        input, button {
+            padding: 8px;
+            margin: 5px;
             border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        audio:focus, button:focus {
-            outline: none;
-            border-color: #0078d7;
+        button {
+            cursor: pointer;
         }
     </style>
-    <script>
-        // 定义语言变量
-        const languages = {
-            'en': {
-                'title': 'Music Request Page',
-                'welcome': 'Welcome to SCM Music Request',
-                'instruction': 'Enter the URL ID in the navigation bar to request a song.',
-                'details': 'Song Details',
-                'id': 'ID',
-                'url': 'URL',
-                'bitrate': 'Bitrate',
-                'size': 'Size',
-                'md5': 'MD5',
-                'level': 'Level',
-                'fee': 'Fee',
-                'error': 'Failed to load song details.',
-                'noUrlId': 'Please enter a URL ID:',
-                'inputPlaceholder': 'Enter URL ID',
-                'go': 'Go',
-                'invalidId': 'Please enter a valid URL ID.',
-                'toggleMode': 'Toggle Dark Mode'
-            },
-            'zh': {
-                'title': '音乐请求页面',
-                'welcome': '欢迎使用SCM音乐请求',
-                'instruction': '在导航栏中输入URL ID以请求歌曲。',
-                'details': '歌曲详细信息',
-                'id': 'ID',
-                'url': '链接',
-                'bitrate': '比特率',
-                'size': '大小',
-                'md5': 'MD5',
-                'level': '级别',
-                'fee': '费用',
-                'error': '加载歌曲详情失败。',
-                'noUrlId': '请输入URL ID:',
-                'inputPlaceholder': '输入URL ID',
-                'go': '前往',
-                'invalidId': '请输入有效的URL ID。',
-                'toggleMode': '切换夜间模式'
-            }
-        };
-
-        // 默认语言设置为英语
-        let currentLanguage = 'en';
-
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.title = languages[currentLanguage].title;
-            document.getElementById('welcomeText').textContent = languages[currentLanguage].welcome;
-            document.getElementById('instructionText').textContent = languages[currentLanguage].instruction;
-            document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode;
-            fetchSongDetails();
-        }
-
-        function toggleTheme() {
-            const body = document.body;
-            if (body.classList.contains('light-mode')) {
-                body.classList.replace('light-mode', 'dark-mode');
-                document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Dark')[0] + ' Light Mode';
-            } else {
-                body.classList.replace('dark-mode', 'light-mode');
-                document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Light')[0] + ' ';
-            }
-            saveThemePreference();
-        }
-
-        function saveThemePreference() {
-            const prefersDarkScheme = document.body.classList.contains('dark-mode');
-            if (prefersDarkScheme) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        }
-
-        function fetchSongDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlId = urlParams.get('urlid');
-
-            if (urlId) {
-                // 构建请求URL
-                const requestUrl = `https://music.cyrilstudio.top/song/url?id=${urlId}`;   
-
-                // 创建一个fetch请求来获取数据
-                fetch(requestUrl)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Network response was not ok.');
-                    })
-                    .then(data => {
-                        // 检查data对象是否包含正确的结构
-                        if (data.code === 200 && data.data && data.data.length > 0) {
-                            displaySongDetails(data.data[0]);
-                        } else {
-                            throw new Error('Invalid response data.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There has been a problem with your fetch operation:', error);
-                        document.getElementById('songDetails').innerHTML = languages[currentLanguage].error;
-                    });
-            } else {
-                // 如果没有urlid参数，显示输入框
-                document.getElementById('songDetails').innerHTML = `
-                    <p>${languages[currentLanguage].noUrlId}</p>
-                    <input type="text" id="urlIdInput" placeholder="${languages[currentLanguage].inputPlaceholder}">
-                    <button onclick="redirectToMusicPage()">Go</button>
-                    <button onclick="setLanguage('zh')">中文</button>
-                    <button onclick="setLanguage('en')">English</button>
-                    <button id="toggleModeButton" onclick="toggleTheme()">${languages[currentLanguage].toggleMode}</button>
-                `;
-            }
-        }
-
-        function displaySongDetails(songData) {
-            // 假设songData是一个包含歌曲信息的对象
-            const songDetails = document.getElementById('songDetails');
-            songDetails.innerHTML = `
-                <h2>${languages[currentLanguage].details}</h2>
-                <p>${languages[currentLanguage].id}: ${songData.id}</p>
-                <p>${languages[currentLanguage].url}: <a href="${songData.url}" target="_blank">${songData.url}</a></p>
-                <p>${languages[currentLanguage].bitrate}: ${songData.br} kbps</p>
-                <p>${languages[currentLanguage].size}: ${songData.size} bytes</p>
-                <p>${languages[currentLanguage].md5}: ${songData.md5}</p>
-                <p>${languages[currentLanguage].level}: ${songData.level}</p>
-                <p>${languages[currentLanguage].fee}: ${songData.fee}</p>
-                <audio controls>
-                    <source src="${songData.url}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-                <button id="toggleModeButton" onclick="toggleTheme()">${languages[currentLanguage].toggleMode}</button>
-            `;
-        }
-
-        function redirectToMusicPage() {
-            const urlId = document.getElementById('urlIdInput').value;
-            if (urlId) {
-                window.location.href = `music.html?urlid=${encodeURIComponent(urlId)}`;
-            } else {
-                alert(languages[currentLanguage].invalidId);
-            }
-        }
-
-        // 页面加载完成后执行fetchSongDetails函数
-        window.onload = function() {
-            fetchSongDetails();
-            // 检测系统偏好的颜色模式
-            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-            const savedTheme = localStorage.getItem('theme');
-            if (prefersDarkScheme.matches || savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Dark')[0] + ' Light Mode';
-            } else {
-                document.body.classList.add('light-mode');
-            }
-        };
-    </script>
 </head>
 <body>
-    <h1 id="welcomeText">Welcome to SCM Music Request</h1>
-    <p id="instructionText">Enter the URL ID in the navigation bar to request a song.</p>
-    <div id="songDetails">
-        <!-- 歌曲详细信息将在这里显示 -->
-    </div>
+    <h1>网易云音乐解析</h1>
+    <input type="text" id="musicUrl" placeholder="请输入网易云音乐链接">
+    <select id="musicQuality">
+        <option value="standard">标准音质</option>
+        <option value="exhigh">极高音质</option>
+        <option value="lossless">无损音质</option>
+        <option value="hires">Hi-Res音质</option>
+        <option value="jyeffect">高清环绕声</option>
+        <option value="sky">沉浸环绕声</option>
+        <option value="jymaster">超清母带</option>
+    </select>
+    <button onclick="fetchMusicData()">解析音乐</button>
+    <div id="result"></div>
+
+    <script>
+        function fetchMusicData() {
+            const yinyue = document.getElementById('musicUrl').value;
+            const yinzhi = document.getElementById('musicQuality').value;
+            const wangyiyun_url = "https://tools.qzxdp.cn/api/wyy_vip/parse";
+            const params = {"url": yinyue, "musicType": yinzhi};
+            const headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46",
+                "Referer": "https://tools.qzxdp.cn/wyy_vip"
+            };
+
+            fetch(wangyiyun_url, {
+                method: 'GET',
+                headers: headers,
+                mode: 'cors',
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `
+                    <p>歌曲名称：${data.data.al_name}</p>
+                    <p>歌手名称：${data.data.ar_name}</p>
+                    <p>专辑名称：${data.data.name}</p>
+                    <p>歌曲音质：${data.data.level}</p>
+                    <p>歌曲大小：${data.data.size}</p>
+                    <p>歌曲封面：<img src="${data.data.pic}" alt="Cover" style="width: 100px;"></p>
+                    <p>歌曲链接：<a href="${data.data.url}" target="_blank">点击播放</a></p>
+                `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = "解析失败，请检查输入的链接和音质选项。";
+            });
+        }
+    </script>
 </body>
 </html>
