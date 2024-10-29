@@ -88,7 +88,7 @@
                 document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Dark')[0] + ' Light Mode';
             } else {
                 body.classList.replace('dark-mode', 'light-mode');
-                document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Light')[0] + ' ';
+                document.getElementById('toggleModeButton').textContent = languages[currentLanguage].toggleMode.split(' Light')[0] + ' Dark Mode';
             }
             saveThemePreference();
         }
@@ -104,11 +104,11 @@
 
         function fetchSongDetails() {
             const urlParams = new URLSearchParams(window.location.search);
-            const urlId = urlParams.get('urlid');
+            const urlId = urlParams.get('id'); // 修改参数名称为id
 
             if (urlId) {
                 // 构建请求URL
-                const requestUrl = `https://api.pearktrue.cn/api/cloudmusic/parse/?id=${urlId}`;   
+                const requestUrl = `https://api.pearktrue.cn/api/cloudmusic/parse/?id=${urlId}`;    
 
                 // 创建一个fetch请求来获取数据
                 fetch(requestUrl)
@@ -120,8 +120,8 @@
                     })
                     .then(data => {
                         // 检查data对象是否包含正确的结构
-                        if (data.code === 200 && data.data && data.data.length > 0) {
-                            displaySongDetails(data.data[0]);
+                        if (data.code === 200 && data.media_url) { // 修改字段为media_url
+                            displaySongDetails(data);
                         } else {
                             throw new Error('Invalid response data.');
                         }
@@ -131,7 +131,7 @@
                         document.getElementById('songDetails').innerHTML = languages[currentLanguage].error;
                     });
             } else {
-                // 如果没有urlid参数，显示输入框
+                // 如果没有id参数，显示输入框
                 document.getElementById('songDetails').innerHTML = `
                     <p>${languages[currentLanguage].noUrlId}</p>
                     <input type="text" id="urlIdInput" placeholder="${languages[currentLanguage].inputPlaceholder}">
@@ -149,14 +149,10 @@
             songDetails.innerHTML = `
                 <h2>${languages[currentLanguage].details}</h2>
                 <p>${languages[currentLanguage].id}: ${songData.id}</p>
-                <p>${languages[currentLanguage].url}: <a href="${songData.url}" target="_blank">${songData.url}</a></p>
-                <p>${languages[currentLanguage].bitrate}: ${songData.br} kbps</p>
-                <p>${languages[currentLanguage].size}: ${songData.size} bytes</p>
-                <p>${languages[currentLanguage].md5}: ${songData.md5}</p>
-                <p>${languages[currentLanguage].level}: ${songData.level}</p>
-                <p>${languages[currentLanguage].fee}: ${songData.fee}</p>
+                <p>${languages[currentLanguage].url}: <a href="${songData.media_url}" target="_blank">${songData.media_url}</a></p>
+                <!-- 其他字段根据需要添加 -->
                 <audio controls>
-                    <source src="${songData.url}" type="audio/mpeg">
+                    <source src="${songData.media_url}" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
                 <button id="toggleModeButton" onclick="toggleTheme()">${languages[currentLanguage].toggleMode}</button>
@@ -166,7 +162,7 @@
         function redirectToMusicPage() {
             const urlId = document.getElementById('urlIdInput').value;
             if (urlId) {
-                window.location.href = `music.html?urlid=${encodeURIComponent(urlId)}`;
+                window.location.href = `music.html?id=${encodeURIComponent(urlId)}`; // 修改参数名称为id
             } else {
                 alert(languages[currentLanguage].invalidId);
             }
