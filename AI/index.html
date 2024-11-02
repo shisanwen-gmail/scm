@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天机器人</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #333;
+            --background-color: #fff;
+            --code-bg-color: #f3f3f3;
+            --code-text-color: #555;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .ai-message {
+            background-color: white;
+            border: 1px solid var(--primary-color);
+            position: relative;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 20px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 1em;
+        }
+
+        .chat-input button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #3a7bc8;
+        }
+
+        .code-box {
+            position: relative;
+            background-color: var(--code-bg-color);
+            color: var(--code-text-color);
+            border-radius: 5px;
+            padding: 10px;
+            overflow: auto;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .chat-container {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">AI 聊天机器人</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <form class="chat-input" id="chatForm">
+            <input type="text" id="userInput" placeholder="输入您的问题..." required>
+            <button type="submit">发送</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user-message');
+            userInput.value = '';
+
+            try {
+                const response = await fetch(`https://api.pearktrue.cn/api/xfai/?message=${encodeURIComponent(message)}`);  
+                const data = await response.json();
+
+                // Display AI response
+                addMessage(data.answer, 'ai-message', data.code);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('抱歉，发生了错误。请稍后再试。', 'ai-message');
+            }
+        });
+
+        function addMessage(text, className, code = null) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', className);
+            text = text.replace(/\n/g, '<br>');
+            messageElement.innerHTML = text;
+
+            if (code) {
+                // Create code box for AI's code output
+                const codeBox = document.createElement('div');
+                codeBox.classList.add('code-box');
+                codeBox.textContent = code;  // Display code directly without any extra tags
+
+                // Create copy button
+                const copyButton = document.createElement('button');
+                copyButton.classList.add('copy-button');
+                copyButton.textContent = '复制代码（没用的）';
+                copyButton.onclick = () => {
+                    navigator.clipboard.writeText(code).then(() => {
+                        alert('代码已复制到剪贴板');
+                    }).catch((err) => {
+                        alert('复制失败: ' + err);
+                    });
+                };
+
+                codeBox.appendChild(copyButton);
+                messageElement.appendChild(codeBox);
+            }
+
+            chatMessages.appendChild(messageElement);
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 100);
+        }
+    </script>
+</body>
+</html>
