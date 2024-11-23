@@ -1,10 +1,26 @@
 {
-  "YiRixc": {
-    "简介": "YiRixc大佬制作的预设",
-    "下载链接": "https://scm.aug.lol/preset/YiRixc/YiRixc.zip"
-  },
-  "天星.": {
-    "简介": "天星大佬制作的PTGI。",
-    "下载链接": "https://scm.aug.lol/preset/StarSerpent/StarSerpent.zip"
-  },
+    "PTGI": {
+        "简介": "天星.大佬制作的预设",
+        "作者": "天星.",
+        "版本": "1.0.0",
+        "更新时间": "2024-03-21",
+        "版权": "版权所有 © 2024 天星.",
+        "下载链接": "https://scm.aug.lol/preset/StarSerpent/StarSerpent.zip",
+        "预览图": "https://th.bing.com/th/id/R.debd6f82e672585509f3403635fda4dc?rik=hNqKQeFKCj%2f0vg&pid=ImgRaw&r=0",
+        "标签": ["风格1", "类型1"],
+        "下载次数": 1000,
+        "文件大小": "50MB"
+    },
+    "预设2名称": {
+        "简介": "这是预设2的详细介绍...",
+        "作者": "另一位作者",
+        "版本": "2.1.0",
+        "更新时间": "2024-03-20",
+        "版权": "版权所有 © 2024 另一位作者",
+        "下载链接": "https://scm.aug.lol/preset/StarSerpent/StarSerpent.zip",
+        "预览图": "https://th.bing.com/th/id/R.debd6f82e672585509f3403635fda4dc?rik=hNqKQeFKCj%2f0vg&pid=ImgRaw&r=0",
+        "标签": ["风格2", "类型2"],
+        "下载次数": 800,
+        "文件大小": "30MB"
+    }
 }
