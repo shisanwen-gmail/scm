@@ -1,0 +1,11 @@
+{
+    "awa": "shisanwenAPI",
+    "start_notice_url": "https://json.scmgzs.top/verify/announcement.txt",
+    "start_notice_brief": "创梦星际官网：www.scmgzs.top",
+    "update_ver": "1.1.5",
+    "update_notice": "\n#R遇到任何问题请到创梦星际反馈！官方群：205881739",
+    "update_url": "",
+    "forced_notice": "",
+    "forced_url": "",
+    "sendchat_notice_url": ""
+}
