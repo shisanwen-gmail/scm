@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<!--
-
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>页面跳转</title>
+    <!-- 页面跳转的脚本部分 -->
+    <!--
     <script>
         window.onload = function() {
             // 尝试跳转到指定的URL
-            window.location.replace('https://www.scmgzs.top/');
+            const targetUrl = 'https://www.scmgzs.top/';
+            window.location.replace(targetUrl);
 
             // 设置一个定时器，检查是否跳转成功
             setTimeout(function() {
                 // 如果页面的URL仍然是当前页面，则说明跳转失败
                 if (window.location.href === window.location.origin + window.location.pathname + window.location.search) {
-                    alert('本域名暂停使用，请访问：https://www.scmgzs.top/');
-                    window.location.href = 'https://www.scmgzs.top/'; // 再次尝试跳转
+                    alert('本域名暂停使用，请访问：' + targetUrl);
+                    window.location.href = targetUrl; // 再次尝试跳转
                 }
             }, 1000); // 1秒后检查跳转状态
-        }
+        };
     </script>
+    -->
 </head>
 <body>
-    //提示信息和链接将在跳转失败时显示
+    <!-- 提示信息和链接将在跳转失败时显示 -->
+    <!--
     <div id="redirectMessage" style="display:none;">
         <p>本域名暂停使用，请访问以下链接：</p>
         <a href="https://www.scmgzs.top/" target="_blank">https://www.scmgzs.top/</a>
@@ -33,17 +36,6 @@
             document.getElementById('redirectMessage').style.display = 'block';
         }
     </script>
+    -->
 </body>
-</html>
-
--->
-
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>网站维护中</title>
-    <div id="redirectMessage" style="display:none;">
-        <p>网站维护中，资源下载请先到官方群或等待服务器维护结束</p>
-        <a href="https://qm.qq.com/q/NnCw882UUs" target="_blank">直达QQ群/</a>
-    </div>
 </html>
